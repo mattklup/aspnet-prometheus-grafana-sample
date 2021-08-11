@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Prometheus;
 
 namespace aspnetcore
 {
@@ -17,11 +18,24 @@ namespace aspnetcore
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureServices(services => {
+                    services.AddHealthChecks();
+                })
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.Configure(applicationBuilder => {
+
+                        applicationBuilder.UseRouting();
+
+                        applicationBuilder.UseHttpMetrics();
+
+                        applicationBuilder.UseEndpoints(endpoints => {
+                            endpoints.MapMetrics();
+                        });
+
                         applicationBuilder.Use(async (context, next) => {
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });
+
                     });
                 });
     }
