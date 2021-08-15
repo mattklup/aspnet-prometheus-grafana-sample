@@ -3,8 +3,11 @@ version: '3.4'
 networks:
   dotnetcorenetwork:
 
+volumes:
+    grafana_data: {}
+
 services:
-  web:
+  aspnetcore:
     image: mattklup/aspnetcore-5:1.0
     ports:
       - 8080:80
@@ -14,11 +17,11 @@ services:
   prometheus:
     image: quay.io/prometheus/prometheus:latest
     depends_on:
-      - web
+      - aspnetcore
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       - dotnetcorenetwork
 
@@ -32,5 +35,9 @@ services:
       environment:
         - GF_SECURITY_ADMIN_PASSWORD=ChangeThis!
         - GF_USERS_ALLOW_SIGN_UP=false
+      volumes:
+        - grafana_data:/var/lib/grafana
+        - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+        - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       networks:
         - dotnetcorenetwork
