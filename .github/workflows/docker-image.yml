@@ -14,5 +14,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Docker Login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_HUB_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mattklup/aspnetcore-5:$(date +%s)
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_HUB_USERNAME}}/aspnetcore-5:1.${GITHUB_RUN_NUMBER}
+
+    - name: Push the Docker image
+      run: docker push ${{secrets.DOCKER_HUB_USERNAME}}/aspnetcore-5:1.${GITHUB_RUN_NUMBER}
