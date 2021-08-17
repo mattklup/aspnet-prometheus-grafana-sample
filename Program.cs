@@ -21,21 +21,27 @@ namespace aspnetcore
                 .ConfigureServices(services => {
                     services.AddHealthChecks();
                 })
-                .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.Configure(applicationBuilder => {
-
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.Configure(applicationBuilder =>
+                    {
                         applicationBuilder.UseRouting();
 
                         applicationBuilder.UseHttpMetrics();
 
-                        applicationBuilder.UseEndpoints(endpoints => {
+                        applicationBuilder.UseEndpoints(endpoints =>
+                        {
                             endpoints.MapMetrics();
                         });
 
-                        applicationBuilder.Use(async (context, next) => {
-                            await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
-                        });
+                        var counter = Metrics.CreateCounter("sample_total_requests", "The total number of requests serviced.");
 
+                        applicationBuilder.Use(async (context, next) =>
+                        {
+                            await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
+
+                            counter.Inc();
+                        });
                     });
                 });
     }
