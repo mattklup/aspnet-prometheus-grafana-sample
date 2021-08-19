@@ -4,9 +4,21 @@ networks:
   dotnetcorenetwork:
 
 volumes:
-    grafana_data: {}
+    grafana_data:
+    logger_data:
 
 services:
+  bash:
+    image: bash:latest
+    stdin_open: true
+    tty: true
+    command: bash -c "/home/fake-logger.sh > /var/log/demo/log.out"
+    volumes:
+      - logger_data:/var/log/demo
+      - ./scripts/fake-logger.sh:/home/fake-logger.sh
+    networks:
+      - dotnetcorenetwork
+
   aspnetcore:
     image: mattklup/aspnetcore-5:1.0
     ports:
@@ -48,6 +60,7 @@ services:
       - elasticsearch
     volumes:
       - ./fluentbit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - logger_data:/var/log/demo
 
     networks:
       - dotnetcorenetwork
@@ -58,5 +71,14 @@ services:
       - 9200:9200
     environment:
       - discovery.type=single-node
+    networks:
+      - dotnetcorenetwork
+
+  jaeger:
+    image: jaegertracing/opentelemetry-all-in-one
+    ports:
+      - 13133:13133 # health check
+      - 16686:16686 # dashboard
+      - 4317:55680 # OTLP
     networks:
       - dotnetcorenetwork
