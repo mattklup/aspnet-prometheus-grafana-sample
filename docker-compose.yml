@@ -6,6 +6,7 @@ networks:
 volumes:
     grafana_data:
     logger_data:
+    db_data:
 
 services:
   bash:
@@ -23,6 +24,23 @@ services:
     image: mattklup/aspnetcore-5:1.0
     ports:
       - 8080:80
+    environment:
+      DB_CONNECTION_STRING: host=postgres;port=5432;database=sampledb;username=dbuser;password=ChangeThis!
+    networks:
+      - dotnetcorenetwork
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5423
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./postgres/seed.sql :/docker-entrypoint-initdb.d/seed.sql
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: ChangeThis!
+      POSTGRES_DB: sampledb
     networks:
       - dotnetcorenetwork
 

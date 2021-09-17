@@ -5,6 +5,6 @@ ID=1
 
 while ((1)); do
     echo "{\"id\": \"$ID\", \"data\": $RANDOM}"
-    sleep 1
+    sleep 5
     let ID=ID+1
 done
