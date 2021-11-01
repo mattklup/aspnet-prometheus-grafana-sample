@@ -21,7 +21,7 @@ services:
       - dotnetcorenetwork
 
   aspnetcore:
-    image: mattklup/aspnetcore-5:1.0
+    image: mattklup/aspnetcore-5:2
     ports:
       - 8080:80
     environment:
