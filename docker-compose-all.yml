@@ -9,13 +9,38 @@ volumes:
     db_data:
 
 services:
+  bash:
+    image: bash:latest
+    stdin_open: true
+    tty: true
+    command: bash -c "/home/fake-logger.sh > /var/log/demo/log.out"
+    volumes:
+      - logger_data:/var/log/demo
+      - ./scripts/fake-logger.sh:/home/fake-logger.sh
+    networks:
+      - dotnetcorenetwork
 
   aspnetcore:
     image: mattklup/aspnetcore-5:2
     ports:
       - 8080:80
     environment:
-      DB_CONNECTION_STRING: tbd
+      DB_CONNECTION_STRING: host=postgres;port=5432;database=sampledb;username=dbuser;password=ChangeThis!
+    networks:
+      - dotnetcorenetwork
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5423
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./postgres/seed.sql :/docker-entrypoint-initdb.d/seed.sql
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: ChangeThis!
+      POSTGRES_DB: sampledb
     networks:
       - dotnetcorenetwork
 
@@ -46,6 +71,26 @@ services:
         - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       networks:
         - dotnetcorenetwork
+
+  fluent-bit:
+    image: fluent/fluent-bit
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./fluentbit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - logger_data:/var/log/demo
+
+    networks:
+      - dotnetcorenetwork
+
+  elasticsearch:
+    image: elasticsearch:7.6.2
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+    networks:
+      - dotnetcorenetwork
 
   jaeger:
     image: jaegertracing/opentelemetry-all-in-one
