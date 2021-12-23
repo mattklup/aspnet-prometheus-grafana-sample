@@ -10,10 +10,19 @@ volumes:
 
 services:
 
-  aspnetcore:
-    image: mattklup/aspnetcore-5:2
+  aspnetcore-1:
+    image: mattklup/aspnetcore-5:local
     ports:
-      - 8080:80
+      - 8081:80
+    environment:
+      DB_CONNECTION_STRING: tbd
+    networks:
+      - dotnetcorenetwork
+
+  aspnetcore-2:
+    image: mattklup/aspnetcore-5:local
+    ports:
+      - 8082:80
     environment:
       DB_CONNECTION_STRING: tbd
     networks:

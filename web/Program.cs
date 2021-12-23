@@ -34,6 +34,16 @@ namespace aspnetcore
                             endpoints.MapMetrics();
                         });
 
+                        var info = Metrics.CreateCounter(
+                            "app_info",
+                            "The total number of requests serviced.",
+                            new CounterConfiguration
+                            {
+                                // Here you specify only the names of the labels.
+                                LabelNames = new[] { "version", "description" }
+                            });
+                        info.WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription).Inc();
+
                         var counter = Metrics.CreateCounter("sample_total_requests", "The total number of requests serviced.");
 
                         applicationBuilder.Use(async (context, next) =>

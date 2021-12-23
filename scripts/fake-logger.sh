@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #UUID=cat /proc/sys/kernel/random/uuid
 UUID="TODO"
