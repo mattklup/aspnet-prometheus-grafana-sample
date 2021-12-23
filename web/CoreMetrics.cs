@@ -9,4 +9,48 @@ using Prometheus;
 
 namespace AspNetCore
 {
+    interface ICoreMetrics
+    {
+        void ApplicationInfo();
+
+        void OnRequest(string method);
+
+        void ActiveWorkloads(double workloadCount);
+    }
+
+    class CoreMetrics : ICoreMetrics
+    {
+        static readonly Counter ApplicationInfoCounter = Metrics.CreateCounter(
+                "app_info",
+                "Basic application runtime information",
+                new CounterConfiguration { LabelNames = new[] { "version", "description" } });
+
+        private readonly Counter totalRequests = Metrics.CreateCounter(
+            "sample_total_requests",
+            "The total number of requests serviced.",
+            new CounterConfiguration { LabelNames = new[] { "method" } });
+
+        private readonly Gauge workloadGauge = Metrics.CreateGauge(
+            "sample_workload_count",
+            "Count of active workloads.");
+
+        public void ApplicationInfo()
+        {
+            ApplicationInfoCounter
+                .WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)
+                .Inc();
+        }
+
+        public void OnRequest(string method)
+        {
+            this.totalRequests
+                .WithLabels(method)
+                .Inc();
+        }
+
+        public void ActiveWorkloads(double workloadCount)
+        {
+            this.workloadGauge.Set(workloadCount);
+        }
+    }
 }

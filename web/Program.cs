@@ -22,11 +22,16 @@ namespace AspNetCore
                     services.AddControllers();
                     services.AddHealthChecks()
                         .ForwardToPrometheus();
-                    })
+                    services.AddSingleton<ICoreMetrics, CoreMetrics>();
+                    services.AddHostedService<CoreBackgroundService>();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.Configure(applicationBuilder =>
                     {
+                        var metrics = applicationBuilder.ApplicationServices.GetRequiredService<ICoreMetrics>();
+                        metrics.ApplicationInfo();
+
                         applicationBuilder.UseRouting();
                         applicationBuilder.UseHttpMetrics();
                         applicationBuilder.UseEndpoints(endpoints =>
@@ -36,21 +41,11 @@ namespace AspNetCore
                             endpoints.MapMetrics();
                         });
 
-                        // Use counter one time for some application info
-                        Metrics.CreateCounter(
-                                "app_info",
-                                "The total number of requests serviced.",
-                                new CounterConfiguration { LabelNames = new[] { "version", "description" } })
-                            .WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)
-                            .Inc();
-
-                        var counter = Metrics.CreateCounter("sample_total_requests", "The total number of requests serviced.");
-
                         applicationBuilder.Use(async (context, next) =>
                         {
+                            metrics.OnRequest(context.Request.Method);
+                            
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
-
-                            counter.Inc();
                         });
                     });
                 });
