@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 
-namespace aspnetcore
+namespace AspNetCore
 {
     public class Program
     {
@@ -19,30 +19,30 @@ namespace aspnetcore
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => {
-                    services.AddHealthChecks();
-                })
+                    services.AddControllers();
+                    services.AddHealthChecks()
+                        .ForwardToPrometheus();
+                    })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.Configure(applicationBuilder =>
                     {
                         applicationBuilder.UseRouting();
-
                         applicationBuilder.UseHttpMetrics();
-
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
+                            endpoints.MapControllers();
+                            endpoints.MapHealthChecks("/healthcheck");
                             endpoints.MapMetrics();
                         });
 
-                        var info = Metrics.CreateCounter(
-                            "app_info",
-                            "The total number of requests serviced.",
-                            new CounterConfiguration
-                            {
-                                // Here you specify only the names of the labels.
-                                LabelNames = new[] { "version", "description" }
-                            });
-                        info.WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription).Inc();
+                        // Use counter one time for some application info
+                        Metrics.CreateCounter(
+                                "app_info",
+                                "The total number of requests serviced.",
+                                new CounterConfiguration { LabelNames = new[] { "version", "description" } })
+                            .WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)
+                            .Inc();
 
                         var counter = Metrics.CreateCounter("sample_total_requests", "The total number of requests serviced.");
 
