@@ -25,6 +25,8 @@ namespace AspNetCore
                     services.AddSingleton<ICoreMetrics, CoreMetrics>();
                     services.AddHostedService<CoreBackgroundService>();
                     services.AddOpenTelemetry();
+
+                    services.AddSingleton<SampleTraceSimulator>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -40,12 +42,20 @@ namespace AspNetCore
                             endpoints.MapControllers();
                             endpoints.MapHealthChecks("/healthcheck");
                             endpoints.MapMetrics();
+
+                            endpoints.Map("/trace", async (context) => {
+                                var traceSimulator = applicationBuilder.ApplicationServices.GetRequiredService<SampleTraceSimulator>();
+
+                                await traceSimulator.SimulateSampleTraceAsync();
+                                //context.Response.StatusCode = 200;
+                                //await context.Response.WriteAsync("Trace");
+                            });
                         });
 
                         applicationBuilder.Use(async (context, next) =>
                         {
                             metrics.OnRequest(context.Request.Method);
-                            
+
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });
                     });

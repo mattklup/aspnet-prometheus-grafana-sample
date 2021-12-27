@@ -31,7 +31,8 @@ services:
   prometheus:
     image: quay.io/prometheus/prometheus:latest
     depends_on:
-      - aspnetcore
+      - aspnetcore-1
+      - aspnetcore-2
     ports:
       - 9090:9090
     volumes:
