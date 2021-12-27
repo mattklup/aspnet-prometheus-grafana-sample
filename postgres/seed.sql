@@ -1,15 +1,14 @@
-
 \connect sampledb
 
-CREATE TABLE sample
+CREATE TABLE IF NOT EXISTS users
 (
     id serial PRIMARY KEY,
-    title  VARCHAR (50)  NOT NULL,
+    name  VARCHAR (50)  NOT NULL,
     description  VARCHAR (100)  NOT NULL
 );
 
-ALTER TABLE "sample" OWNER TO dbuser;
+ALTER TABLE "users" OWNER TO postgres;
 
-Insert into sample(title,description) values( 'Title 1','Description 1');
-Insert into sample(title,description) values( 'Title 2','Description 2');
-Insert into sample(title,description) values( 'Title 3','Description 3');
+Insert into users(name,description) values('User 1', 'Description 1');
+Insert into users(name,description) values('User 2', 'Description 2');
+Insert into users(name,description) values('User 3', 'Description 3');
