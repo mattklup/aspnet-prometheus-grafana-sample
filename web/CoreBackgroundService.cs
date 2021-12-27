@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -17,12 +18,18 @@ namespace AspNetCore
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            var MyActivitySource = new ActivitySource("SampleService");
+
+            using var activityParent = MyActivitySource.StartActivity("workload-start");
             Random random = new();
             double workloadCount = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                workloadCount += random.Next(-10, 10);
+                using var activity = MyActivitySource.StartActivity("workload-execute");
+                var delta = random.Next(-10, 10);
+                activity?.SetTag("workload-delta", delta);
+                workloadCount += delta;
                 workloadCount = Math.Max(0, workloadCount);
                 workloadCount = Math.Min(100, workloadCount);
 

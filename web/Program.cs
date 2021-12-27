@@ -24,6 +24,7 @@ namespace AspNetCore
                         .ForwardToPrometheus();
                     services.AddSingleton<ICoreMetrics, CoreMetrics>();
                     services.AddHostedService<CoreBackgroundService>();
+                    services.AddOpenTelemetry();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
