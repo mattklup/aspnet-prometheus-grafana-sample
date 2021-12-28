@@ -20,10 +20,10 @@ namespace AspNetCore
 
     class CoreMetrics : ICoreMetrics
     {
-        static readonly Counter ApplicationInfoCounter = Metrics.CreateCounter(
+        static readonly Gauge ApplicationInfoCounter = Metrics.CreateGauge(
                 "app_info",
                 "Basic application runtime information",
-                new CounterConfiguration { LabelNames = new[] { "version", "description" } });
+                "version", "description");
 
         private readonly Counter totalRequests = Metrics.CreateCounter(
             "sample_total_requests",
@@ -38,7 +38,7 @@ namespace AspNetCore
         {
             ApplicationInfoCounter
                 .WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)
-                .Inc();
+                .Set(1);
         }
 
         public void OnRequest(string method)
