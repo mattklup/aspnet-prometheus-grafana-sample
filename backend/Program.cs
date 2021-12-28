@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 
-namespace AspNetCore
+namespace AspNetCoreBackend
 {
     public class Program
     {
@@ -19,44 +20,34 @@ namespace AspNetCore
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => {
-                    services.AddHttpClient();
-                    services.AddControllers();
                     services.AddHealthChecks()
                         .ForwardToPrometheus();
-                    services.AddSingleton<ICoreMetrics, CoreMetrics>();
-                    services.AddHostedService<CoreBackgroundService>();
                     services.AddOpenTelemetry();
-
-                    services.AddSingleton<SampleTraceSimulator>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.Configure(applicationBuilder =>
                     {
-                        var metrics = applicationBuilder.ApplicationServices.GetRequiredService<ICoreMetrics>();
-                        metrics.ApplicationInfo();
-
                         applicationBuilder.UseRouting();
                         applicationBuilder.UseHttpMetrics();
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
-                            endpoints.MapControllers();
                             endpoints.MapHealthChecks("/healthcheck");
                             endpoints.MapMetrics();
 
-                            endpoints.Map("/trace", async (context) => {
-                                var traceSimulator = applicationBuilder.ApplicationServices.GetRequiredService<SampleTraceSimulator>();
+                            endpoints.Map("/getuser", async (context) => {
+                                var telemetry = applicationBuilder.ApplicationServices.GetRequiredService<ICoreTelemetry>();
+                                using var span = telemetry.Start("GetUser");
 
-                                await traceSimulator.SimulateSampleTraceAsync();
-                                //context.Response.StatusCode = 200;
-                                //await context.Response.WriteAsync("Trace");
+                                await Task.Delay(TimeSpan.FromSeconds(2));
+
+                                context.Response.StatusCode = 200;
+                                await context.Response.WriteAsync(Guid.NewGuid().ToString());
                             });
                         });
 
                         applicationBuilder.Use(async (context, next) =>
                         {
-                            metrics.OnRequest(context.Request.Method);
-
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });
                     });

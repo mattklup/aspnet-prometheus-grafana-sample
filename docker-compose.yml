@@ -28,11 +28,21 @@ services:
     networks:
       - dotnetcorenetwork
 
+  aspnetcorebackend-1:
+    image: mattklup/aspnetcorebackend-5:local
+    ports:
+      - 8083:80
+    environment:
+      TEST: test
+    networks:
+      - dotnetcorenetwork
+
   prometheus:
     image: quay.io/prometheus/prometheus:latest
     depends_on:
       - aspnetcore-1
       - aspnetcore-2
+      - aspnetcorebackend-1
     ports:
       - 9090:9090
     volumes:
