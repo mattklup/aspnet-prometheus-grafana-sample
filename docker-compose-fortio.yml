@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+
+  fortio:
+    image: fortio/fortio
+    depends_on:
+      - aspnetcore-1
+      - aspnetcore-2
+      - aspnetcorebackend-1
+    ports:
+      - 8079:8079
+      - 8080:8080
+    networks:
+      - dotnetcorenetwork

@@ -14,3 +14,4 @@ scrape_configs:
     - targets:
       - aspnetcore-1:80
       - aspnetcore-2:80
+      - aspnetcorebackend-1:80
