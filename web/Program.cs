@@ -1,10 +1,15 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AspNetCore.Controllers;
 using Prometheus;
 
 namespace AspNetCore
@@ -20,14 +25,17 @@ namespace AspNetCore
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => {
                     services.AddHttpClient();
-                    services.AddControllers();
                     services.AddHealthChecks()
                         .ForwardToPrometheus();
                     services.AddSingleton<ICoreMetrics, CoreMetrics>();
                     services.AddHostedService<CoreBackgroundService>();
                     services.AddOpenTelemetry();
-
                     services.AddSingleton<SampleTraceSimulator>();
+                    services.AddSingleton<ILoadTestSimulator, LoadTestSimulator>();
+
+                    // Since I didn't use 'UseStartup', services.AddControllers() won't work by itself
+                    services.AddControllers().AddApplicationPart(typeof(Program).Assembly).AddControllersAsServices();
+                    services.AddSwaggerGen();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -36,8 +44,13 @@ namespace AspNetCore
                         var metrics = applicationBuilder.ApplicationServices.GetRequiredService<ICoreMetrics>();
                         metrics.ApplicationInfo();
 
+                        applicationBuilder.UseSwagger();
+                        applicationBuilder.UseSwaggerUI();
+
                         applicationBuilder.UseRouting();
                         applicationBuilder.UseHttpMetrics();
+                        applicationBuilder.UseExceptionHandler();
+
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();
@@ -56,6 +69,28 @@ namespace AspNetCore
                         applicationBuilder.Use(async (context, next) =>
                         {
                             metrics.OnRequest(context.Request.Method);
+
+                            /*
+                            var currentEndpoint = context.GetEndpoint();
+
+                            if (currentEndpoint is null)
+                            {
+                                await next();
+                                return;
+                            }
+
+                            Console.WriteLine($"Endpoint: {currentEndpoint.DisplayName}");
+
+                            if (currentEndpoint is RouteEndpoint routeEndpoint)
+                            {
+                                Console.WriteLine($"  - Route Pattern: {routeEndpoint.RoutePattern}");
+                            }
+
+                            foreach (var endpointMetadata in currentEndpoint.Metadata)
+                            {
+                                Console.WriteLine($"  - Metadata: {endpointMetadata}");
+                            }
+                            */
 
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });

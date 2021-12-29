@@ -4,7 +4,7 @@ services:
 
   fortio:
     image: fortio/fortio
-    command: load -c 32 -qps 25 -t 2m http://aspnetcore-1/loadtest
+    command: load -c 50 -n 500 -t 2m http://aspnetcore-1/test
     depends_on:
       - aspnetcore-1
       - aspnetcore-2
