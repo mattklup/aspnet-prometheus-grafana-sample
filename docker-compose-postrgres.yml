@@ -1,0 +1,21 @@
+version: '3.4'
+
+networks:
+  dotnetcorenetwork:
+
+services:
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5423
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./postgres/seed.sql :/docker-entrypoint-initdb.d/seed.sql
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: ChangeThis!
+      POSTGRES_DB: sampledb
+    networks:
+      - dotnetcorenetwork

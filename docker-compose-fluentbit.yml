@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+
+  bash:
+    image: bash:latest
+    stdin_open: true
+    tty: true
+    command: bash -c "/home/fake-logger.sh > /var/log/demo/log.out"
+    volumes:
+      - logger_data:/var/log/demo
+      - ./scripts/fake-logger.sh:/home/fake-logger.sh
+    networks:
+      - dotnetcorenetwork
+
+  fluent-bit:
+    image: fluent/fluent-bit
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./fluentbit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - logger_data:/var/log/demo
+
+    networks:
+      - dotnetcorenetwork
+
+  elasticsearch:
+    image: elasticsearch:7.6.2
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+    networks:
+      - dotnetcorenetwork
