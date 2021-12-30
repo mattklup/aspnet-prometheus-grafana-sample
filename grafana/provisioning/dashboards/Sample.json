@@ -64,7 +64,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 6,
         "x": 0,
         "y": 1
       },
@@ -123,12 +123,49 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 89
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Exception Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 208
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 97
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 6,
+        "x": 6,
         "y": 1
       },
       "id": 14,
@@ -144,7 +181,7 @@
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Value #A"
+            "displayName": "Count"
           }
         ]
       },
@@ -184,6 +221,124 @@
               "names": [
                 "Time",
                 "Exception Type",
+                "Count"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 157
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "instance"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 172
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 12,
+        "y": 1
+      },
+      "id": 15,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Count"
+          }
+        ]
+      },
+      "pluginVersion": "8.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": false,
+          "expr": "sum without(exception_type)(sample_total_exceptions)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Exceptions Per Instance",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value #A": "Count",
+              "exception_type": "Exception Type"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "instance",
                 "Count"
               ]
             }
@@ -379,7 +534,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 184
+                "value": 83
               }
             ]
           }
@@ -387,7 +542,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 9,
+        "w": 5,
         "x": 12,
         "y": 10
       },
@@ -453,6 +608,6 @@
   "timezone": "",
   "title": "Sample Dashboard",
   "uid": "xGo4tyo7z",
-  "version": 6,
+  "version": 7,
   "weekStart": ""
 }
