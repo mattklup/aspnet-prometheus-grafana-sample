@@ -49,7 +49,20 @@ namespace AspNetCore
 
                         applicationBuilder.UseRouting();
                         applicationBuilder.UseHttpMetrics();
-                        applicationBuilder.UseExceptionHandler();
+
+
+                        applicationBuilder.Use(async (context, next) =>
+                        {
+                            try
+                            {
+                                await next();
+                            }
+                            catch(Exception)
+                            {
+                                context.Response.StatusCode = 500;
+                                throw;
+                            }
+                        });
 
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
@@ -69,6 +82,11 @@ namespace AspNetCore
                         applicationBuilder.Use(async (context, next) =>
                         {
                             metrics.OnRequest(context.Request.Method);
+
+                            if (context.Request.Path.Value.Contains("error", StringComparison.OrdinalIgnoreCase))
+                            {
+                                throw new InvalidOperationException("error");
+                            }
 
                             /*
                             var currentEndpoint = context.GetEndpoint();
