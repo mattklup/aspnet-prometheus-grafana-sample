@@ -2,15 +2,23 @@ version: '3.4'
 
 services:
 
-  fortio:
+  fortio-1:
     image: fortio/fortio
-    command: load -c 50 -n 500 -t 2m http://aspnetcore-1/test
+    command: load -c 15 -n 1000 -t 5m http://aspnetcore-1/test
     depends_on:
       - aspnetcore-1
-      - aspnetcore-2
       - aspnetcorebackend-1
     ports:
       - 8079:8079
       - 8080:8080
+    networks:
+      - dotnetcorenetwork
+
+  fortio-2:
+    image: fortio/fortio
+    command: load -c 25 -n 2000 -t 20m http://aspnetcore-2/test
+    depends_on:
+      - aspnetcore-2
+      - aspnetcorebackend-1
     networks:
       - dotnetcorenetwork
