@@ -60,7 +60,13 @@ namespace AspNetCore.Controllers
 
             if (random.Next(10) == 0)
             {
-                throw new InvalidOperationException("Simulated exception");
+                var value = random.Next(5);
+                throw value switch
+                {
+                    0 => new InvalidOperationException("load test"),
+                    _ when value <= 3 => new NotSupportedException("load test"),
+                    _ => new Exception("Unknown")
+                };
             }
 
             // simulate work
