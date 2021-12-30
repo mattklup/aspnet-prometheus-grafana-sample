@@ -25,11 +25,10 @@ namespace AspNetCore
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => {
                     services.AddHttpClient();
-                    services.AddHealthChecks()
-                        .ForwardToPrometheus();
-                    services.AddSingleton<ICoreMetrics, CoreMetrics>();
-                    services.AddHostedService<CoreBackgroundService>();
+                    services.AddCoreMetrics(services.AddHealthChecks());
                     services.AddOpenTelemetry();
+
+                    services.AddHostedService<CoreBackgroundService>();
                     services.AddSingleton<SampleTraceSimulator>();
                     services.AddSingleton<ILoadTestSimulator, LoadTestSimulator>();
 
@@ -48,9 +47,9 @@ namespace AspNetCore
                         applicationBuilder.UseSwaggerUI();
 
                         applicationBuilder.UseRouting();
-                        applicationBuilder.UseHttpMetrics();
+                        applicationBuilder.UseCoreMetricsMiddleware();
 
-
+                        /* Use typed middleware instead
                         applicationBuilder.Use(async (context, next) =>
                         {
                             try
@@ -63,6 +62,7 @@ namespace AspNetCore
                                 throw;
                             }
                         });
+                        */
 
                         applicationBuilder.UseEndpoints(endpoints =>
                         {

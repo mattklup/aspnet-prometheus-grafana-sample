@@ -38,12 +38,12 @@ namespace AspNetCore
         }
     }
 
-    interface ICoreTelemetry
+    public interface ICoreTelemetry
     {
         ICoreTelemetrySpan Start(string name);
     }
 
-    interface ICoreTelemetrySpan : IDisposable
+    public interface ICoreTelemetrySpan : IDisposable
     {
         void SetTag(string key, object value);
     }
