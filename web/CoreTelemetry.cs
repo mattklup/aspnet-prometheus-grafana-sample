@@ -23,7 +23,7 @@ namespace AspNetCore
                 builder
                     //.AddConsoleExporter()
                     //.AddSource(serviceName, "OpenTelemetry.Instrumentation.AspNetCore")
-                    .AddSource(serviceName, nameof(CoreTelemetry))
+                    .AddSource(serviceName, nameof(CoreTelemetry), nameof(QueueBackgroundService))
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
                             .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
@@ -46,6 +46,8 @@ namespace AspNetCore
     public interface ICoreTelemetrySpan : IDisposable
     {
         void SetTag(string key, object value);
+
+        void SetBaggage(string key, string value);
     }
 
     class CoreTelemetry : ICoreTelemetry
@@ -67,6 +69,11 @@ namespace AspNetCore
             public void SetTag(string key, object value)
             {
                 this.Activity?.SetTag(key, value);
+            }
+
+            public void SetBaggage(string key, string value)
+            {
+                this.Activity?.SetBaggage(key, value);
             }
 
             public void Dispose()

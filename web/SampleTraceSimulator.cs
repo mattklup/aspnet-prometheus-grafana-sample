@@ -25,25 +25,28 @@ namespace AspNetCore
 
             using var span = this.telemetry.Start(nameof(SampleTraceSimulator));
 
-            {
-                // Call to other service on docker network
-                var request = new HttpRequestMessage(
-                    HttpMethod.Get,
-                    "http://aspnetcorebackend-1/getuser")
+            span?.SetBaggage("start-time", DateTimeOffset.UtcNow.ToString());
+
+            // Call to other service on docker network
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "http://aspnetcorebackend-1/getuser")
+                {
+                    Headers =
                     {
-                        Headers =
-                        {
-                            { "x-test-header", "test-header" }
-                        }
-                    };
+                        { "x-test-header", "test-header" }
+                    }
+                };
 
-                var response = await httpClient.SendAsync(request);
+            var task = httpClient.SendAsync(request)
+                .ContinueWith(async (responseTask) => {
+                    var response = responseTask.Result;
+                    response.EnsureSuccessStatusCode();
+                    var user = await response.Content.ReadAsStringAsync();
 
-                response.EnsureSuccessStatusCode();
-                var user = await response.Content.ReadAsStringAsync();
-
-                span.SetTag("user", user);
-            }
+                    span.SetTag("user", user);
+                    return user;
+                });
 
             {
                 using var subSpan1 = this.telemetry.Start(nameof(SampleTraceSimulator) + "_1");
@@ -61,7 +64,7 @@ namespace AspNetCore
             }
 
             // simulate work
-            //await Task.Delay(TimeSpan.FromSeconds(3));
+            await task;
         }
     }
 }

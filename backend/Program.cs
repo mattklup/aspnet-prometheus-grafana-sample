@@ -38,16 +38,24 @@ namespace AspNetCoreBackend
                             endpoints.Map("/getuser", async (context) => {
                                 var telemetry = applicationBuilder.ApplicationServices.GetRequiredService<ICoreTelemetry>();
                                 using var span = telemetry.Start("GetUser");
+                                var id = Guid.NewGuid().ToString();
 
-                                await Task.Delay(TimeSpan.FromSeconds(2));
+                                await Task.Delay(TimeSpan.FromSeconds(1));
+                                span?.SetTag("Message", id);
+
+                                await RabbitMQ.QueueAsync(id);
+                                await Task.Delay(TimeSpan.FromSeconds(1));
 
                                 context.Response.StatusCode = 200;
-                                await context.Response.WriteAsync(Guid.NewGuid().ToString());
+                                await context.Response.WriteAsync(id);
                             });
                         });
 
                         applicationBuilder.Use(async (context, next) =>
                         {
+                            var telemetry = applicationBuilder.ApplicationServices.GetRequiredService<ICoreTelemetry>();
+                            using var span = telemetry.Start("QueueMessage");
+                            await RabbitMQ.QueueAsync();
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });
                     });

@@ -12,6 +12,8 @@ services:
 
   aspnetcore-1:
     image: mattklup/aspnetcore-5:local
+    depends_on:
+      - rabbitmq
     ports:
       - 8081:80
     environment:
@@ -21,6 +23,8 @@ services:
 
   aspnetcore-2:
     image: mattklup/aspnetcore-5:local
+    depends_on:
+      - rabbitmq
     ports:
       - 8082:80
     environment:
