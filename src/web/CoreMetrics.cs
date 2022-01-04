@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
+using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
 {
@@ -24,17 +25,6 @@ namespace AspNetCore
 
             return applicationBuilder;
         }
-    }
-
-    public interface ICoreMetrics
-    {
-        void ApplicationInfo();
-
-        void OnRequest(string method);
-
-        void OnException(Exception exception);
-
-        void ActiveWorkloads(double workloadCount);
     }
 
     class CoreMetrics : ICoreMetrics

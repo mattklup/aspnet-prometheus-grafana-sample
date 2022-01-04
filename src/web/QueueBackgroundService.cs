@@ -10,6 +10,7 @@ using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
 {

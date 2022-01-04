@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AspNetCore.Controllers;
 using Prometheus;
+using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
 {
