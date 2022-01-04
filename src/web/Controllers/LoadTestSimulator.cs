@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCore;
+using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore.Controllers
 {

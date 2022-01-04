@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
+using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
 {
@@ -35,18 +36,6 @@ namespace AspNetCore
                         });
             });
         }
-    }
-
-    public interface ICoreTelemetry
-    {
-        ICoreTelemetrySpan Start(string name);
-    }
-
-    public interface ICoreTelemetrySpan : IDisposable
-    {
-        void SetTag(string key, object value);
-
-        void SetBaggage(string key, string value);
     }
 
     class CoreTelemetry : ICoreTelemetry
