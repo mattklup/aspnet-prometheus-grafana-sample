@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/web/bin/Debug/net5.0/AspNetCore.dll",
+            "program": "${workspaceFolder}/src/web/bin/Debug/net5.0/AspNetCore.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

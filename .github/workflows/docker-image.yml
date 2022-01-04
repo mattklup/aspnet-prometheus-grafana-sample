@@ -24,7 +24,7 @@ jobs:
 
     - name: Build the Docker image
       run: |
-        pushd ./web 
+        pushd ./src/web
         docker build . --file Dockerfile --tag ${{secrets.DOCKER_HUB_USERNAME}}/aspnetcore-5:2 #${GITHUB_RUN_NUMBER}
         popd
 
