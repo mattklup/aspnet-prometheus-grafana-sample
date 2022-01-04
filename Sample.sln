@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore", "src\web\AspNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBackend", "src\backend\AspNetCoreBackend.csproj", "{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Abstractions", "src\core\AspNetCore.Abstractions.csproj", "{D359FF75-53BD-4640-924F-7A990056F22D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,9 +48,22 @@ Global
 		{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}.Release|x64.Build.0 = Release|Any CPU
 		{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}.Release|x86.ActiveCfg = Release|Any CPU
 		{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}.Release|x86.Build.0 = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|x64.Build.0 = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Debug|x86.Build.0 = Debug|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x64.ActiveCfg = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x64.Build.0 = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x86.ActiveCfg = Release|Any CPU
+		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C1315B86-D027-4B94-8FC6-5D36A20C3A53} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
 		{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
+		{D359FF75-53BD-4640-924F-7A990056F22D} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
 	EndGlobalSection
 EndGlobal
