@@ -21,8 +21,7 @@ namespace AspNetCoreBackend
             return services.AddOpenTelemetryTracing(builder =>
             {
                 builder
-                    .AddConsoleExporter()
-                    //.AddSource(serviceName, "OpenTelemetry.Instrumentation.AspNetCore")
+                    //.AddConsoleExporter()
                     .AddSource(serviceName, nameof(CoreTelemetry))
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()

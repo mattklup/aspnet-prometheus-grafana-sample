@@ -22,7 +22,6 @@ namespace AspNetCore
             {
                 builder
                     //.AddConsoleExporter()
-                    //.AddSource(serviceName, "OpenTelemetry.Instrumentation.AspNetCore")
                     .AddSource(serviceName, nameof(CoreTelemetry), nameof(QueueBackgroundService))
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
