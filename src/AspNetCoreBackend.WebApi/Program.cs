@@ -1,11 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using AspNetCore.Abstractions.Observability;
+using AspNetCore.Observability;
+using AspNetCore.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Prometheus;
 
 namespace AspNetCoreBackend
@@ -19,9 +23,9 @@ namespace AspNetCoreBackend
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices(services => {
-                    services.AddHealthChecks()
-                        .ForwardToPrometheus();
+                .ConfigureServices(services =>
+                {
+                    services.AddCoreMetrics(services.AddHealthChecks());
                     services.AddOpenTelemetry();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -29,13 +33,14 @@ namespace AspNetCoreBackend
                     webBuilder.Configure(applicationBuilder =>
                     {
                         applicationBuilder.UseRouting();
-                        applicationBuilder.UseHttpMetrics();
+                        applicationBuilder.UseCoreMetricsMiddleware();
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
                             endpoints.MapHealthChecks("/healthcheck");
                             endpoints.MapMetrics();
 
-                            endpoints.Map("/getuser", async (context) => {
+                            endpoints.Map("/getuser", async (context) =>
+                            {
                                 var telemetry = applicationBuilder.ApplicationServices.GetRequiredService<ICoreTelemetry>();
                                 using var span = telemetry.Start("GetUser");
 
@@ -52,7 +57,7 @@ namespace AspNetCoreBackend
                                     context.Response.StatusCode = 200;
                                     await context.Response.WriteAsync(id);
                                 }
-                                catch(Exception exception)
+                                catch (Exception exception)
                                 {
                                     span?.SetTag("exception-type", exception.GetType().Name);
                                     span?.SetTag("exception-message", exception.Message);
@@ -70,7 +75,7 @@ namespace AspNetCoreBackend
                                 await RabbitMQ.QueueAsync();
                                 await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                             }
-                            catch(Exception exception)
+                            catch (Exception exception)
                             {
                                 span?.SetTag("exception-type", exception.GetType().Name);
                                 span?.SetTag("exception-message", exception.Message);

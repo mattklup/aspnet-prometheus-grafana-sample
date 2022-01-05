@@ -1,42 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Mvc;
-using AspNetCore;
+using System.Threading.Tasks;
 using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore.Controllers
 {
-
-    [ApiController]
-    [Route("/test")]
-    public class RootController : ControllerBase
-    {
-        private readonly ILoadTestSimulator simulator;
-
-        public RootController(ILoadTestSimulator simulator)
-        {
-            this.simulator = simulator;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return new ObjectResult(new
-            {
-                Test = "load",
-                User = await this.simulator.SimulateLoadTestAsync()
-            });
-        }
-    }
-
-    public interface ILoadTestSimulator
-    {
-        Task<string> SimulateLoadTestAsync();
-    }
-
-    class LoadTestSimulator : ILoadTestSimulator
+    internal class LoadTestSimulator : ILoadTestSimulator
     {
         private readonly ICoreMetrics metrics;
         private readonly ICoreTelemetry telemetry;
@@ -62,12 +31,14 @@ namespace AspNetCore.Controllers
             if (random.Next(10) == 0)
             {
                 var value = random.Next(5);
-                throw value switch
+                var exception = value switch
                 {
                     0 => new InvalidOperationException("load test"),
                     _ when value <= 3 => new NotSupportedException("load test"),
-                    _ => new Exception("Unknown")
+                    _ => new Exception("Unknown"),
                 };
+
+                throw exception;
             }
 
             // simulate work

@@ -4,6 +4,7 @@ WORKDIR /sample
 
 COPY ./src ./src/
 COPY Sample.sln .
+COPY .editorconfig .
 
 RUN dotnet restore
 

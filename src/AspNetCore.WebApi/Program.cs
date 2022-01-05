@@ -1,19 +1,16 @@
 using System;
 using System.Threading.Tasks;
+using AspNetCore.Abstractions.Observability;
+using AspNetCore.Controllers;
+using AspNetCore.Observability;
+using AspNetCore.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using AspNetCore.Controllers;
 using Prometheus;
-using AspNetCore.Abstractions.Observability;
-using AspNetCore.Observability;
-using AspNetCore.Telemetry;
 
 namespace AspNetCore
 {
@@ -26,7 +23,8 @@ namespace AspNetCore
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices(services => {
+                .ConfigureServices(services =>
+                {
                     services.AddHttpClient();
                     services.AddCoreMetrics(services.AddHealthChecks());
                     services.AddOpenTelemetry();
@@ -54,33 +52,17 @@ namespace AspNetCore
                         applicationBuilder.UseRouting();
                         applicationBuilder.UseCoreMetricsMiddleware();
 
-                        /* Use typed middleware instead
-                        applicationBuilder.Use(async (context, next) =>
-                        {
-                            try
-                            {
-                                await next();
-                            }
-                            catch(Exception)
-                            {
-                                context.Response.StatusCode = 500;
-                                throw;
-                            }
-                        });
-                        */
-
                         applicationBuilder.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();
                             endpoints.MapHealthChecks("/healthcheck");
                             endpoints.MapMetrics();
 
-                            endpoints.Map("/trace", async (context) => {
+                            endpoints.Map("/trace", async (context) =>
+                            {
                                 var traceSimulator = applicationBuilder.ApplicationServices.GetRequiredService<SampleTraceSimulator>();
 
                                 await traceSimulator.SimulateSampleTraceAsync();
-                                //context.Response.StatusCode = 200;
-                                //await context.Response.WriteAsync("Trace");
                             });
                         });
 
@@ -92,28 +74,6 @@ namespace AspNetCore
                             {
                                 throw new InvalidOperationException("error");
                             }
-
-                            /*
-                            var currentEndpoint = context.GetEndpoint();
-
-                            if (currentEndpoint is null)
-                            {
-                                await next();
-                                return;
-                            }
-
-                            Console.WriteLine($"Endpoint: {currentEndpoint.DisplayName}");
-
-                            if (currentEndpoint is RouteEndpoint routeEndpoint)
-                            {
-                                Console.WriteLine($"  - Route Pattern: {routeEndpoint.RoutePattern}");
-                            }
-
-                            foreach (var endpointMetadata in currentEndpoint.Metadata)
-                            {
-                                Console.WriteLine($"  - Metadata: {endpointMetadata}");
-                            }
-                            */
 
                             await context.Response.WriteAsync($"hi, you wanted '{context.Request.Path}'");
                         });

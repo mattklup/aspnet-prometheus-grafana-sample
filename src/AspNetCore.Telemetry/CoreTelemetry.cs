@@ -1,16 +1,9 @@
-using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using OpenTelemetry;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
 using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore.Telemetry
 {
-
-    class CoreTelemetry : ICoreTelemetry
+    internal class CoreTelemetry : ICoreTelemetry
     {
         private static readonly ActivitySource source = new ActivitySource(nameof(CoreTelemetry));
 
@@ -18,7 +11,7 @@ namespace AspNetCore.Telemetry
         {
             return new Span()
             {
-                Activity = source.StartActivity(name)
+                Activity = source.StartActivity(name),
             };
         }
 

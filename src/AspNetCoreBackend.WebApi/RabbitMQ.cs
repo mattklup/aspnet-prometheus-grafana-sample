@@ -37,7 +37,7 @@ namespace AspNetCoreBackend
             var properties = channel.CreateBasicProperties();
             AddActivityToHeader(Activity.Current, properties);
 
-            channel.BasicPublish(exchange: "",
+            channel.BasicPublish(exchange: string.Empty,
                                 routingKey: "hello",
                                 basicProperties: properties,
                                 body: body);

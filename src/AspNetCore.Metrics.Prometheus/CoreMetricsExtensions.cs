@@ -1,10 +1,7 @@
-using System;
-using System.Threading.Tasks;
+using AspNetCore.Abstractions.Observability;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
-using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore.Observability
 {

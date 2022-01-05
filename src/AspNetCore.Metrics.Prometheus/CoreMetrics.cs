@@ -1,16 +1,12 @@
 using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Prometheus;
 using AspNetCore.Abstractions.Observability;
+using Prometheus;
 
 namespace AspNetCore.Observability
 {
-    class CoreMetrics : ICoreMetrics
+    internal class CoreMetrics : ICoreMetrics
     {
-        static readonly Gauge ApplicationInfoCounter = Metrics.CreateGauge(
+        private static readonly Gauge ApplicationInfoCounter = Metrics.CreateGauge(
             "app_info",
             "Basic application runtime information",
             "version", "description");

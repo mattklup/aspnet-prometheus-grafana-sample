@@ -2,12 +2,12 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using AspNetCore.Abstractions.Observability;
+using Microsoft.Extensions.Hosting;
 
 namespace AspNetCore
 {
-    class CoreBackgroundService : BackgroundService
+    internal class CoreBackgroundService : BackgroundService
     {
         private readonly ICoreMetrics metrics;
 
@@ -18,15 +18,15 @@ namespace AspNetCore
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            var MyActivitySource = new ActivitySource("SampleService");
+            var myActivitySource = new ActivitySource("SampleService");
 
-            using var activityParent = MyActivitySource.StartActivity("workload-start");
-            Random random = new();
+            using var activityParent = myActivitySource.StartActivity("workload-start");
+            Random random = new ();
             double workloadCount = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                using var activity = MyActivitySource.StartActivity("workload-execute");
+                using var activity = myActivitySource.StartActivity("workload-execute");
                 var delta = random.Next(-10, 10);
                 activity?.SetTag("workload-delta", delta);
                 workloadCount += delta;

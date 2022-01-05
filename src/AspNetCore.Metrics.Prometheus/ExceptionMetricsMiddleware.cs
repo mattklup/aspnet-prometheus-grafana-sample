@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Abstractions.Observability;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCore.Observability
 {
@@ -24,7 +22,7 @@ namespace AspNetCore.Observability
             {
                 await this.next(context);
             }
-            catch(Exception excption)
+            catch (Exception excption)
             {
                 this.metrics.OnException(excption);
 

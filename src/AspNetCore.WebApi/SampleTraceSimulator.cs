@@ -1,12 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
 {
-    class SampleTraceSimulator
+    internal class SampleTraceSimulator
     {
         private readonly ICoreMetrics metrics;
         private readonly ICoreTelemetry telemetry;
@@ -35,12 +34,13 @@ namespace AspNetCore
                 {
                     Headers =
                     {
-                        { "x-test-header", "test-header" }
-                    }
+                        { "x-test-header", "test-header" },
+                    },
                 };
 
             var task = httpClient.SendAsync(request)
-                .ContinueWith(async (responseTask) => {
+                .ContinueWith(async (responseTask) =>
+                {
                     var response = responseTask.Result;
                     response.EnsureSuccessStatusCode();
                     var user = await response.Content.ReadAsStringAsync();
@@ -49,22 +49,23 @@ namespace AspNetCore
                     return user;
                 });
 
+            // Sub span
             {
                 using var subSpan1 = this.telemetry.Start(nameof(SampleTraceSimulator) + "_1");
-                await Task.Delay(TimeSpan.FromSeconds(random.Next(2,5)));
+                await Task.Delay(TimeSpan.FromSeconds(random.Next(2, 5)));
             }
 
+            // Sub span
             {
                 using var subSpan2 = this.telemetry.Start(nameof(SampleTraceSimulator) + "_2");
-                await Task.Delay(TimeSpan.FromSeconds(random.Next(2,5)));
+                await Task.Delay(TimeSpan.FromSeconds(random.Next(2, 5)));
             }
 
             {
                 using var subSpan3 = this.telemetry.Start(nameof(SampleTraceSimulator) + "_3");
-                await Task.Delay(TimeSpan.FromSeconds(random.Next(2,5)));
+                await Task.Delay(TimeSpan.FromSeconds(random.Next(2, 5)));
             }
 
-            // simulate work
             await task;
         }
     }

@@ -1,12 +1,7 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using OpenTelemetry;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
 using AspNetCore.Abstractions.Observability;
+using Microsoft.Extensions.DependencyInjection;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace AspNetCore.Telemetry
 {
@@ -23,7 +18,6 @@ namespace AspNetCore.Telemetry
             return services.AddOpenTelemetryTracing(builder =>
             {
                 builder
-                    //.AddConsoleExporter()
                     .AddSource(serviceName, nameof(CoreTelemetry))
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
