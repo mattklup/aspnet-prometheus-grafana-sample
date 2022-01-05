@@ -11,5 +11,6 @@ $ docker push mattklup/aspnetcore-5:1.0
 # Run app with Prometheus/Grafana
 
 ```bash
-$ docker-compose up
+$ docker build -t mattklup/aspnetcore-5:local .
+$ ./run.sh
 ```
