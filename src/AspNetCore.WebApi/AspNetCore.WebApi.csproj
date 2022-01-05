@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\core\AspNetCore.Abstractions.csproj" />
+    <ProjectReference Include="..\AspNetCore.Abstractions\AspNetCore.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

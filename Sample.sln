@@ -5,11 +5,11 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E1AE036-BD64-4328-ABF7-F20B1C7563BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore", "src\AspNetCore.WebApi\AspNetCore.WebApi.csproj", "{C1315B86-D027-4B94-8FC6-5D36A20C3A53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.WebApi", "src\AspNetCore.WebApi\AspNetCore.WebApi.csproj", "{C1315B86-D027-4B94-8FC6-5D36A20C3A53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBackend", "src\backend\AspNetCoreBackend.csproj", "{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBackend.WebApi", "src\AspNetCoreBackend.WebApi\AspNetCoreBackend.WebApi.csproj", "{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Abstractions", "src\core\AspNetCore.Abstractions.csproj", "{D359FF75-53BD-4640-924F-7A990056F22D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Abstractions", "src\AspNetCore.Abstractions\AspNetCore.Abstractions.csproj", "{D359FF75-53BD-4640-924F-7A990056F22D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
