@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Prometheus;
 using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore
