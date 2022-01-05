@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
 using AspNetCore.Abstractions.Observability;
 
-namespace AspNetCore
+namespace AspNetCore.Observability
 {
-    static class CoreMetricsExtensions
+    public static class CoreMetricsExtensions
     {
         public static IServiceCollection AddCoreMetrics(this IServiceCollection services, IHealthChecksBuilder healthChecksBuilder = null)
         {

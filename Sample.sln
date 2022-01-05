@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBackend.WebApi", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Abstractions", "src\AspNetCore.Abstractions\AspNetCore.Abstractions.csproj", "{D359FF75-53BD-4640-924F-7A990056F22D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Metrics.Prometheus", "src\AspNetCore.Metrics.Prometheus\AspNetCore.Metrics.Prometheus.csproj", "{21246AEB-4036-432F-A601-22929570D0AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +62,23 @@ Global
 		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x64.Build.0 = Release|Any CPU
 		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D359FF75-53BD-4640-924F-7A990056F22D}.Release|x86.Build.0 = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|x64.Build.0 = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Debug|x86.Build.0 = Debug|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|x64.ActiveCfg = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|x64.Build.0 = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{21246AEB-4036-432F-A601-22929570D0AF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C1315B86-D027-4B94-8FC6-5D36A20C3A53} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
 		{0978C52A-DEDB-4AD4-86B2-93EBE92D3A77} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
 		{D359FF75-53BD-4640-924F-7A990056F22D} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
+		{21246AEB-4036-432F-A601-22929570D0AF} = {7E1AE036-BD64-4328-ABF7-F20B1C7563BD}
 	EndGlobalSection
 EndGlobal

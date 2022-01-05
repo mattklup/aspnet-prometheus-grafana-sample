@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="prometheus-net" Version="5.0.2" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
+    <PackageReference Include="prometheus-net.AspNetCore.HealthChecks" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.Abstractions\AspNetCore.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

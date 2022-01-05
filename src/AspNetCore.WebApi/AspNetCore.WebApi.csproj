@@ -11,15 +11,13 @@
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc8" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc8" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc8" />
-    <PackageReference Include="prometheus-net" Version="5.0.2" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
-    <PackageReference Include="prometheus-net.AspNetCore.HealthChecks" Version="5.0.2" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Abstractions\AspNetCore.Abstractions.csproj" />
+    <ProjectReference Include="..\AspNetCore.Metrics.Prometheus\AspNetCore.Metrics.Prometheus.csproj" />
   </ItemGroup>
 
 </Project>

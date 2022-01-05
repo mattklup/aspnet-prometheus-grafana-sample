@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using AspNetCore.Controllers;
 using Prometheus;
 using AspNetCore.Abstractions.Observability;
+using AspNetCore.Observability;
 
 namespace AspNetCore
 {
