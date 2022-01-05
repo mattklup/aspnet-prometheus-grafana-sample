@@ -27,7 +27,7 @@ namespace AspNetCore
                 {
                     services.AddHttpClient();
                     services.AddCoreMetrics(services.AddHealthChecks());
-                    services.AddOpenTelemetry();
+                    services.AddOpenTelemetry("SampleService", nameof(QueueBackgroundService));
 
                     services.AddHostedService<CoreBackgroundService>(); // Simulate batch work
                     services.AddHostedService<QueueBackgroundService>(); // Read queue messages

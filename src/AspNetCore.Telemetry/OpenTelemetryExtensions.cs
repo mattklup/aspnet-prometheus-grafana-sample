@@ -7,18 +7,15 @@ namespace AspNetCore.Telemetry
 {
     public static class OpenTelemetryExtensions
     {
-        public static IServiceCollection AddOpenTelemetry(this IServiceCollection services)
+        public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, string serviceName, string serviceVersion, params string[] sources)
         {
-            // Define some important constants and the activity source
-            var serviceName = "SampleService";
-            var serviceVersion = "1.0.0";
-
             services.AddSingleton<ICoreTelemetry, CoreTelemetry>();
 
             return services.AddOpenTelemetryTracing(builder =>
             {
                 builder
                     .AddSource(serviceName, nameof(CoreTelemetry))
+                    .AddSource(sources)
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
                             .AddService(serviceName: serviceName, serviceVersion: serviceVersion))

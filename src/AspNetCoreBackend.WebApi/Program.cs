@@ -26,7 +26,7 @@ namespace AspNetCoreBackend
                 .ConfigureServices(services =>
                 {
                     services.AddCoreMetrics(services.AddHealthChecks());
-                    services.AddOpenTelemetry();
+                    services.AddOpenTelemetry("SampleServiceBackend", "1.0.0");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
