@@ -13,6 +13,7 @@ using AspNetCore.Controllers;
 using Prometheus;
 using AspNetCore.Abstractions.Observability;
 using AspNetCore.Observability;
+using AspNetCore.Telemetry;
 
 namespace AspNetCore
 {

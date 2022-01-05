@@ -1,15 +1,16 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using AspNetCore.Abstractions.Observability;
 
-namespace AspNetCore
+namespace AspNetCore.Telemetry
 {
-    static class OpenTelemetryExtensions
+    public static class OpenTelemetryExtensions
     {
         public static IServiceCollection AddOpenTelemetry(this IServiceCollection services)
         {
@@ -23,7 +24,7 @@ namespace AspNetCore
             {
                 builder
                     //.AddConsoleExporter()
-                    .AddSource(serviceName, nameof(CoreTelemetry), nameof(QueueBackgroundService))
+                    .AddSource(serviceName, nameof(CoreTelemetry))
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
                             .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
@@ -35,39 +36,6 @@ namespace AspNetCore
                             jaegerOptions.AgentPort = 6831;
                         });
             });
-        }
-    }
-
-    class CoreTelemetry : ICoreTelemetry
-    {
-        private static readonly ActivitySource source = new ActivitySource(nameof(CoreTelemetry));
-
-        public ICoreTelemetrySpan Start(string name)
-        {
-            return new Span()
-            {
-                Activity = source.StartActivity(name)
-            };
-        }
-
-        internal class Span : ICoreTelemetrySpan
-        {
-            public Activity Activity { get; init; }
-
-            public void SetTag(string key, object value)
-            {
-                this.Activity?.SetTag(key, value);
-            }
-
-            public void SetBaggage(string key, string value)
-            {
-                this.Activity?.SetBaggage(key, value);
-            }
-
-            public void Dispose()
-            {
-                this.Activity?.Dispose();
-            }
         }
     }
 }
