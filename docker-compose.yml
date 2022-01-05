@@ -35,7 +35,7 @@ services:
       - dotnetcorenetwork
 
   aspnetcorebackend-1:
-    image: mattklup/aspnetcorebackend-5:local
+    image: mattklup/aspnetcore-5:local
     command: AspNetCoreBackend.WebApi.dll
     ports:
       - 8083:80

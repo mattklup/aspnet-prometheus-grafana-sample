@@ -1,16 +1,6 @@
-# Basic build and deploy of the app
+# Run app with Prometheus/Grafana/Jaeger
 
 ```bash
-$ docker build -t aspnetapp .
-$ docker run -it --rm -p 8080:80 --name myapp aspnetapp
-
-$ docker image tag aspnetapp mattklup/aspnetcore-5:1.0
-$ docker push mattklup/aspnetcore-5:1.0
-```
-
-# Run app with Prometheus/Grafana
-
-```bash
-$ docker build -t mattklup/aspnetcore-5:local .
-$ ./run.sh
+./docker-build.sh
+./run.sh
 ```
