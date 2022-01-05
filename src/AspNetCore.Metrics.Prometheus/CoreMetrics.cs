@@ -8,25 +8,6 @@ using AspNetCore.Abstractions.Observability;
 
 namespace AspNetCore.Observability
 {
-    public static class CoreMetricsExtensions
-    {
-        public static IServiceCollection AddCoreMetrics(this IServiceCollection services, IHealthChecksBuilder healthChecksBuilder = null)
-        {
-            services.AddSingleton<ICoreMetrics, CoreMetrics>();
-            healthChecksBuilder?.ForwardToPrometheus();
-
-            return services;
-        }
-
-        public static IApplicationBuilder UseCoreMetricsMiddleware(this IApplicationBuilder applicationBuilder)
-        {
-            applicationBuilder.UseHttpMetrics();
-            applicationBuilder.UseMiddleware<ExceptionMetricsMiddleware>();
-
-            return applicationBuilder;
-        }
-    }
-
     class CoreMetrics : ICoreMetrics
     {
         static readonly Gauge ApplicationInfoCounter = Metrics.CreateGauge(
@@ -74,32 +55,4 @@ namespace AspNetCore.Observability
             this.workloadGauge.Set(workloadCount);
         }
     }
-
-    public class ExceptionMetricsMiddleware
-    {
-        private readonly RequestDelegate next;
-        private readonly ICoreMetrics metrics;
-
-        public ExceptionMetricsMiddleware(RequestDelegate next, ICoreMetrics metrics)
-        {
-            this.next = next;
-            this.metrics = metrics;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
-        {
-            try
-            {
-                await this.next(context);
-            }
-            catch(Exception excption)
-            {
-                this.metrics.OnException(excption);
-
-                context.Response.StatusCode = 500;
-                throw;
-            }
-        }
-    }
-
 }
