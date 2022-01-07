@@ -34,12 +34,14 @@ namespace AspNetCore
         {
             using var activity = Activity.StartActivity("QueueService");
 
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
             this.factory = new ConnectionFactory() { HostName = "rabbitmq", DispatchConsumersAsync = true };
             this.connection = factory.CreateConnection();
+            this.connection.ConnectionBlocked += (sender, args) => Console.WriteLine($"{args.Reason}");
+            this.connection.ConnectionShutdown += (sender, args) => Console.WriteLine($"{args.Cause}");
             this.channel = connection.CreateModel();
             channel.QueueDeclare(queue: "hello",
-                                durable: false,
+                                durable: true,
                                 exclusive: false,
                                 autoDelete: false,
                                 arguments: null);

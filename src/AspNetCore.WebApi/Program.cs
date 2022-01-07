@@ -63,6 +63,7 @@ namespace AspNetCore
                                 var traceSimulator = applicationBuilder.ApplicationServices.GetRequiredService<SampleTraceSimulator>();
 
                                 await traceSimulator.SimulateSampleTraceAsync();
+                                await context.Response.WriteAsync($"TRACE");
                             });
                         });
 

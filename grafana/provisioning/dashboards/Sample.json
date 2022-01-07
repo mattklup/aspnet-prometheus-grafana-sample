@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -209,7 +209,7 @@
             "excludeByName": {},
             "indexByName": {},
             "renameByName": {
-              "Value #A": "Count",
+              "Value": "Count",
               "exception_type": "Exception Type"
             }
           }
@@ -494,7 +494,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sample_workload_count",
+          "expr": "sample_workload_count{instance=~\"aspnetcore-1:80|aspnetcore-2:80\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -608,6 +608,6 @@
   "timezone": "",
   "title": "Sample Dashboard",
   "uid": "xGo4tyo7z",
-  "version": 7,
+  "version": 1,
   "weekStart": ""
 }
