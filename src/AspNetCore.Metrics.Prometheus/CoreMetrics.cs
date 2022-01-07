@@ -6,7 +6,7 @@ namespace AspNetCore.Observability
 {
     internal class CoreMetrics : ICoreMetrics
     {
-        private static readonly Gauge ApplicationInfoCounter = Metrics.CreateGauge(
+        private readonly Gauge applicationInfoCounter = Metrics.CreateGauge(
             "app_info",
             "Basic application runtime information",
             "version", "description");
@@ -22,12 +22,12 @@ namespace AspNetCore.Observability
             "exception_type");
 
         private readonly Gauge workloadGauge = Metrics.CreateGauge(
-            "sample_workload_count",
+            "sample_workload_count",    
             "Count of active workloads.");
 
         public void ApplicationInfo()
         {
-            ApplicationInfoCounter
+            this.applicationInfoCounter
                 .WithLabels(System.Environment.Version.ToString(), System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)
                 .Set(1);
         }
