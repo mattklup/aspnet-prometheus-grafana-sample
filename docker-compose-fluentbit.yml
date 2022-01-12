@@ -6,7 +6,7 @@ services:
     image: bash:latest
     stdin_open: true
     tty: true
-    command: bash -c "/home/fake-logger.sh > /var/log/demo/log.out"
+    command: bash /home/fake-logger.sh > /var/log/demo/log.out
     volumes:
       - logger_data:/var/log/demo
       - ./scripts/fake-logger.sh:/home/fake-logger.sh
