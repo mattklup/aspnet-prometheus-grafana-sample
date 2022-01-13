@@ -19,6 +19,7 @@ services:
       - elasticsearch
     volumes:
       - ./fluentbit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./fluentbit/parsers.conf:/fluent-bit/etc/parsers.conf
       - logger_data:/var/log/demo
 
     networks:
